@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Get Avatar</title>
+    
+
+    <style>
+      html {
+        box-sizing: border-box;
+        font-size:100%;
+      }
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+      
+      body { 
+        padding:100px; 
+        font-family: Helvetica, Arial, sans-serif;
+        font-size:14px;
+      }
+
+      #ava_avatar {
+        position:relative;
+        margin:0 auto;
+        width:120px;
+        height:120px;
+        border-radius: 60px;
+        background-color: #eeeeee;
+        border: 1px solid #c1c1c1;
+        background-repeat: no-repeat;
+        background-size:cover;
+        background-position: 50% 50%;
+      }
+      #ava_avatar:before {
+        position:absolute;
+        content:'+';
+        color: #fff;
+        /*font-weight: bold;*/
+        font-size: 50px;
+        line-height:116px;
+        text-align: center;
+        visibility: hidden;
+        opacity:0;
+        width:100%;
+        height:100%;
+        background-color: rgba(0,0,0, 0.45);
+        cursor:pointer;
+        border-radius: 60px;
+        -webkit-transition: all 150ms;
+        -moz-transition: all 150ms;
+        -ms-transition: all 150ms;
+        -o-transition: all 150ms;
+        transition: all 150ms;
+      }
+      #ava_avatar:hover:before { 
+        visibility: visible;
+        opacity:1;
+      }
+      
+      #ava_modal {
+        z-index:-1;
+        position:fixed;
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
+        background-color: rgba(0,0,0, 0.55);
+        opacity:0;
+        visibility: hidden;
+        -webkit-transition: all 150ms;
+        -moz-transition: all 150ms;
+        -ms-transition: all 150ms;
+        -o-transition: all 150ms;
+        transition: all 150ms;
+      }
+      #ava_modal.show {
+        z-index:99999;
+        opacity:1;
+        visibility: visible;
+      }
+
+      #ava_modal .ava_modal {
+        width:500px;
+        margin:150px auto;
+        height:auto;
+        background-color: #fff;
+        /*border: 1px solid #fcfcfc;*/
+      }
+      #ava_modal .ava_modal .ava_modal_header {
+        width:100%;
+        line-height:50px;
+        height:50px;
+        background-color: #fafafa;
+        border-bottom: 1px solid #eee;
+      }
+        #ava_modal .ava_modal .ava_modal_header .ava_modal_header_left { 
+          width:75%; 
+          float:left; 
+          text-align:left; 
+          padding-left: 10px;
+          /*border-bottom: 1px solid #fcfcfc;*/
+        }
+        #ava_modal .ava_modal .ava_modal_header .ava_modal_header_right { 
+          width:25%;
+          float:right;
+          text-align:right;
+          /*border-bottom: 1px solid #fcfcfc;*/
+        }
+
+        #ava_modal .ava_modal #ava_modal_close {
+          display:inline-block;
+          padding:0 20px;
+          height:100%;
+          /*font-weight: bold;*/
+          font-size:20px;
+          background-color:#eaeaea;
+          color: #999;
+          cursor:pointer;
+          text-align:center;
+        }
+        #ava_modal .ava_modal #ava_modal_close:hover { background-color: #ddd; color:#444; } 
+
+      #ava_modal .ava_modal .ava_modal_body {
+        clear:both;
+        width:100%;
+        margin-bottom:1px;
+      }
+        #ava_modal .ava_modal .ava_modal_body .ava_box {
+          width:33.333333333333337%;
+          float:left;
+          height:150px;
+          display:table;
+          border-right:1px solid #eee;
+          border-bottom:1px solid #eee;
+          cursor: pointer;
+        }
+        #ava_modal .ava_modal .ava_modal_body .ava_box:hover {
+          background-color: #eee;
+        }
+        #ava_modal .ava_modal .ava_modal_body .ava_box .ava_box_inner {
+          text-align:center;
+          width:100%;
+          vertical-align: middle;
+          display: table-cell;
+        }
+        #ava_modal .ava_modal .ava_modal_body .ava_box .ava_social_icon {
+          display:inline-block;
+          width:64px;
+          height:64px;
+          background-repeat:no-repeat;
+          background-size:100% 100%;
+          background-position: 50% 50%;
+        }
+          #ava_modal .ava_modal .ava_modal_body .ava_box .ava_social_icon.ava_social_icon_google {
+            background-image: url('http://i.imgur.com/DJhyBHF.png');
+          }
+          #ava_modal .ava_modal .ava_modal_body .ava_box .ava_social_icon.ava_social_icon_twitter {
+            background-image: url('http://i.imgur.com/4fknyL5.png');
+          }
+          #ava_modal .ava_modal .ava_modal_body .ava_box .ava_social_icon.ava_social_icon_facebook {
+            background-image: url('http://i.imgur.com/cvSekL9.png');
+          }
+        #ava_modal .ava_modal .ava_modal_body .ava_box:nth-child(3n) {
+          border-right:none;
+        }
+
+      #ava_modal .ava_modal .ava_modal_footer {
+        clear:both;
+      }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="ava_modal">
+  <div class="ava_modal">
+    <div class="ava_modal_header">
+      <div class="ava_modal_header_left">
+        <strong>Fetch your avatar from a service</strong>
+      </div>
+      <div class="ava_modal_header_right">
+        <div id="ava_modal_close">&times;</div>
+      </div>
+    </div>
+    <div class="ava_modal_body">
+      <div class="ava_box" onclick="get_avatar_from_service('bryan@shanaver.com', 'google')">
+        <div class="ava_box_inner">
+          <div class="ava_social_icon ava_social_icon_google"></div>
+        </div>
+      </div>
+      <div class="ava_box">
+        <div class="ava_box_inner">
+          <div class="ava_social_icon ava_social_icon_twitter"></div>
+        </div>
+      </div>
+      <div class="ava_box">
+        <div class="ava_box_inner">
+          <div class="ava_social_icon ava_social_icon_facebook"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ava_modal_footer"></div>
+  </div>
+</div>
+
+
+  <!-- Begin page content -->
+  <div id="content">
+      
+      <div id="ava_avatar" style=""></div>
+      
+      
+  </div>
+  
+
+
+<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+
+
+<script>
+
+  var API_KEYS = {
+    google : {
+      key: "AIzaSyDDLaUui2j9ktbvnMNWU6gIh9PnnFQrczc",
+      auth_uri: "https://accounts.google.com/o/oauth2/auth",
+      client_secret: "tZvOPhROaGa8Hreww_0cPuZR",
+      token_uri: "https://accounts.google.com/o/oauth2/token",
+      client_email: "1059027857433-c0dalmtgqtc40enoa10b3oo1206cm52s@developer.gserviceaccount.com",
+      redirect_uris: ["http://localhost/oauth2callback"],
+      client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/1059027857433-c0dalmtgqtc40enoa10b3oo1206cm52s@developer.gserviceaccount.com",
+      client_id: "1059027857433-c0dalmtgqtc40enoa10b3oo1206cm52s.apps.googleusercontent.com",
+      auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+      javascript_origins: ["http://localhost"]
+    }
+  }
+
+
+  var ava_avatar = document.getElementById('ava_avatar');
+
+  var ava_modal = {
+
+    el : {
+      root : document.getElementById('ava_modal'),
+      close : document.getElementById('ava_modal_close')
+    },
+
+    show : function() {
+      this.el.root.className = this.el.root.className + ' show';
+    },
+
+    hide : function() {
+      var cls = 'show';
+      var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+      this.el.root.className = this.el.root.className.replace(reg, '');
+    }
+    
+  }
+
+  ava_avatar.addEventListener('click', function (event) {
+    console.log('ava_modal show');
+    ava_modal.show()
+  });
+
+  ava_modal.el.close.addEventListener('click', function (event) {
+    console.log('ava_modal hide');
+    ava_modal.hide();
+  });
+
+
+
+
+  function get_avatar_from_service(email, service, size) {
+
+    console.log('running');
+
+    var url = '';
+
+    switch (service) {
+
+    case "google":
+      
+      var scopes = 'https://www.googleapis.com/auth/plus.me';
+
+      gapi.client.setApiKey(API_KEYS.google.key);
+      gapi.auth.authorize({client_id: API_KEYS.google.client_id, scope: scopes, immediate: false}, makeApiCall);
+
+      function makeApiCall() {
+        gapi.client.load('plus', 'v1', function() {
+          var request = gapi.client.plus.people.get({
+            'userId': 'me',
+          });
+
+          request.execute(function(resp) {
+
+            console.log(resp);
+
+            var img_src = resp.image.url;
+            var name    = resp.displayName;
+
+            localStorage.setItem('ava_img_url', resp.image.url);
+
+            setAva()
+          });
+        });
+      }
+      
+      break;
+
+    case "facebook":
+        
+      break;
+
+    case "gravatar":
+        
+      break;
+
+
+    default:
+        url = "http://i.imgur.com/RLiDK.png"; // 48x48
+    }
+
+    return url;
+  }
+
+  function setAva() {
+
+    console.log('setting avatar');
+
+    var img_url = localStorage.getItem('ava_img_url');
+
+    document.getElementById('ava_avatar').style.backgroundImage = 'url("'+img_url+'")';
+
+    ava_modal.hide();
+  }
+
+  function isNumber(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
+</script>
+
+
+
+
+
+</body>
+</html>
